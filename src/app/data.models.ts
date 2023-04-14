@@ -30,4 +30,4 @@ export interface Stats {
   lastGames: Result[];
 }
 
-export type Result = 'W' | 'L';
+export type Result = "W" | "L";
