@@ -1,0 +1,7 @@
+select:disabled {
+  border-color: var(--input-border-color);
+}
+
+button:disabled {
+  background: lightgray;
+}

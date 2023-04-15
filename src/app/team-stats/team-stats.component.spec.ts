@@ -1,23 +1,22 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { TeamStatsComponent } from './team-stats.component';
+import { TeamStatsComponent } from "./team-stats.component";
 
-describe('TeamResultsComponent', () => {
+describe("TeamResultsComponent", () => {
   let component: TeamStatsComponent;
   let fixture: ComponentFixture<TeamStatsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TeamStatsComponent ]
-    })
-    .compileComponents();
+      declarations: [TeamStatsComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TeamStatsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

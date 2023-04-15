@@ -3,7 +3,8 @@
   margin: 5px;
   display: block;
 }
-span{
+
+span {
   float: right;
   cursor: pointer;
 }
