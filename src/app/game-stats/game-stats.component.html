@@ -1,11 +1,29 @@
 <div class="row">
   <div class="col-sm-11">
-    <select #teamSelect>
-      <option [value]="team.id" *ngFor="let team of teams$ | async">
-        {{ team.full_name }}
-      </option>
-    </select>
-    <button class="primary" (click)="trackTeam(teamSelect.value)">Track team</button>
+    <form [formGroup]="teamsFilteringForm">
+      <select formControlName="conference">
+        <option [value]="null" disabled selected>Select a Conference</option>
+        <option [value]="singleConference" *ngFor="let singleConference of allConference">
+          {{ singleConference }}
+        </option>
+      </select>
+
+      <select formControlName="division">
+        <option [value]="null" disabled selected>Select a Division</option>
+        <option [value]="singleDivision" *ngFor="let singleDivision of division$ | async">
+          {{ singleDivision }}
+        </option>
+      </select>
+
+      <select #teamSelect formControlName="team">
+        <option [value]="null" disabled selected>Select a Team</option>
+        <option [value]="team.id" *ngFor="let team of teams$ | async">
+          {{ team.full_name }}
+        </option>
+      </select>
+
+      <button class="primary" type="submit" (click)="trackTeam(teamSelect.value)">Track team</button>
+    </form>
   </div>
 </div>
 <div class="row">

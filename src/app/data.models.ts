@@ -12,12 +12,10 @@ export interface Game {
   visitor_team_score: number;
 }
 
-export interface Team {
+export interface Team extends League {
   id: number;
   abbreviation: string;
   city: string;
-  conference: string;
-  division: string;
   full_name: string;
   name: string;
 }
@@ -29,5 +27,14 @@ export interface Stats {
   averagePointsConceded: number;
   lastGames: Result[];
 }
+
+export interface League {
+  conference: Conference;
+  division: Division;
+}
+
+export type Conference = "Western" | "Eastern";
+
+export type Division = "Atlantic" | "Central" | "Southeast " | "Northwest" | "Pacific" | "Southwest";
 
 export type Result = "W" | "L";

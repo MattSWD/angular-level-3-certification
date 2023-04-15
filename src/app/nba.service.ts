@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { map, Observable } from "rxjs";
 import { format, subDays } from "date-fns";
-import { Game, Stats, Team } from "./data.models";
+import { Conference, Division, Game, League, Stats, Team } from "./data.models";
 
 @Injectable({
   providedIn: "root",
@@ -24,6 +24,16 @@ export class NbaService {
   removeTrackedTeam(team: Team): void {
     let index = this.trackedTeams.findIndex((t) => t.id == team.id);
     this.trackedTeams.splice(index, 1);
+  }
+
+  getDivisionsByConference(conference: Conference): Observable<Division[]> {
+    return this.http.get<League[]>("assets/json/data.json").pipe(
+      map((leagues: League[]): Division[] => {
+        return [...leagues]
+          .filter((league: League) => league.conference == conference)
+          .map((filteredLeague: League) => filteredLeague.division);
+      })
+    );
   }
 
   getTrackedTeams(): Team[] {

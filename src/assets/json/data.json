@@ -1,0 +1,26 @@
+[
+  {
+    "conference": "Eastern",
+    "division": "Atlantic"
+  },
+  {
+    "conference": "Eastern",
+    "division": "Central"
+  },
+  {
+    "conference": "Eastern",
+    "division": "Southeast"
+  },
+  {
+    "conference": "Western",
+    "division": "Northwest"
+  },
+  {
+    "conference": "Western",
+    "division": "Pacific"
+  },
+  {
+    "conference": "Western",
+    "division": "Southwest"
+  }
+]
