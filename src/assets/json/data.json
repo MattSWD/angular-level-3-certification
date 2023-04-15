@@ -1,26 +1,26 @@
 [
   {
-    "conference": "Eastern",
+    "conference": "East",
     "division": "Atlantic"
   },
   {
-    "conference": "Eastern",
+    "conference": "East",
     "division": "Central"
   },
   {
-    "conference": "Eastern",
+    "conference": "East",
     "division": "Southeast"
   },
   {
-    "conference": "Western",
+    "conference": "West",
     "division": "Northwest"
   },
   {
-    "conference": "Western",
+    "conference": "West",
     "division": "Pacific"
   },
   {
-    "conference": "Western",
+    "conference": "West",
     "division": "Southwest"
   }
 ]

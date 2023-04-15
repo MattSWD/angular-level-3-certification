@@ -33,7 +33,7 @@ export interface League {
   division: Division;
 }
 
-export type Conference = "Western" | "Eastern";
+export type Conference = "West" | "East";
 
 export type Division = "Atlantic" | "Central" | "Southeast " | "Northwest" | "Pacific" | "Southwest";
 

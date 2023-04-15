@@ -15,14 +15,16 @@
         </option>
       </select>
 
-      <select #teamSelect formControlName="team">
+      <select formControlName="team">
         <option [value]="null" disabled selected>Select a Team</option>
-        <option [value]="team.id" *ngFor="let team of teams$ | async">
+        <option [ngValue]="team" *ngFor="let team of teams$ | async">
           {{ team.full_name }}
         </option>
       </select>
 
-      <button class="primary" type="submit" (click)="trackTeam(teamSelect.value)">Track team</button>
+      <button class="primary" type="submit" [disabled]="teamsFilteringForm?.invalid" (click)="trackTeam()">
+        Track team
+      </button>
     </form>
   </div>
 </div>

@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Conference, Division, Team } from "../data.models";
-import { Observable, Subject, takeUntil, tap } from "rxjs";
+import { Observable, of, Subject, takeUntil, tap } from "rxjs";
 import { NbaService } from "../nba.service";
-import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 
 @Component({
   selector: "app-game-stats",
@@ -16,7 +16,7 @@ export class GameStatsComponent implements OnInit, OnDestroy {
   division$: Observable<Division[]>;
 
   allTeams: Team[] = [];
-  allConference: Conference[] = ["Western", "Eastern"];
+  allConference: Conference[] = ["West", "East"];
   teamsFilteringForm: FormGroup = new FormGroup<any>([]);
 
   constructor(protected nbaService: NbaService, private formBuilder: FormBuilder) {
@@ -26,20 +26,21 @@ export class GameStatsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.creatingTeamsFilteringForm();
     this.onConferenceChange();
+    this.onDivisionChange();
   }
 
-  creatingTeamsFilteringForm() {
+  creatingTeamsFilteringForm(): void {
     this.teamsFilteringForm = this.formBuilder.group({
       conference: new FormControl<Conference>(null),
       division: new FormControl<Division>({
         value: null,
         disabled: true,
       }),
-      team: new FormControl<Team>(null),
+      team: new FormControl<Team>(null, { validators: Validators.required }),
     });
   }
 
-  onConferenceChange() {
+  onConferenceChange(): void {
     this.teamsFilteringForm
       .get("conference")
       .valueChanges.pipe(
@@ -54,9 +55,36 @@ export class GameStatsComponent implements OnInit, OnDestroy {
       });
   }
 
-  trackTeam(teamId: string): void {
-    let team: Team = this.allTeams.find((team: Team) => team.id == Number(teamId));
-    if (team) this.nbaService.addTrackedTeam(team);
+  onDivisionChange(): void {
+    this.teamsFilteringForm
+      .get("division")
+      .valueChanges.pipe(
+        tap(() => (this.teamsFilteringForm.get("team") as FormControl<Team>).reset()),
+        takeUntil(this._onDestroy)
+      )
+      .subscribe({
+        next: () => {
+          this.getFilteredTeam();
+        },
+      });
+  }
+
+  getFilteredTeam(): void {
+    const selectedConference: Conference = this.teamsFilteringForm.get("conference").value;
+    const selectedDivision: Division = this.teamsFilteringForm.get("division").value;
+    let filteredTeams: Team[] = [...this.allTeams];
+
+    if (selectedConference) {
+      filteredTeams = filteredTeams.filter((team: Team) => team.conference == selectedConference);
+    }
+    if (selectedDivision) {
+      filteredTeams = filteredTeams.filter((team: Team) => team.division == selectedDivision);
+    }
+    this.teams$ = of(filteredTeams);
+  }
+
+  trackTeam(): void {
+    this.nbaService.addTrackedTeam(this.teamsFilteringForm.get("team").value as Team);
   }
 
   ngOnDestroy(): void {
