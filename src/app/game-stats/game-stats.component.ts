@@ -49,8 +49,10 @@ export class GameStatsComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: () => {
-          this.division$ = this.nbaService.getDivisionsByConference(this.teamsFilteringForm.get("conference").value);
-          (this.teamsFilteringForm.get("division") as FormControl<Division>).enable();
+          if (this.teamsFilteringForm.get("conference").value) {
+            this.division$ = this.nbaService.getDivisionsByConference(this.teamsFilteringForm.get("conference").value);
+            (this.teamsFilteringForm.get("division") as FormControl<Division>).enable();
+          }
         },
       });
   }
@@ -85,6 +87,8 @@ export class GameStatsComponent implements OnInit, OnDestroy {
 
   trackTeam(): void {
     this.nbaService.addTrackedTeam(this.teamsFilteringForm.get("team").value as Team);
+    (this.teamsFilteringForm.get("division") as FormControl<Division>).disable();
+    (this.teamsFilteringForm.get("conference") as FormControl<Conference>).reset();
   }
 
   ngOnDestroy(): void {
