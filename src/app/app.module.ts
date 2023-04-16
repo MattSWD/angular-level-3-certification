@@ -8,10 +8,11 @@ import { TeamStatsComponent } from "./team-stats/team-stats.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { GameResultsComponent } from "./game-results/game-results.component";
 import { GameStatsComponent } from "./game-stats/game-stats.component";
+import { DialogComponent } from "./shared/components/dialog/dialog.component";
 
 @NgModule({
   declarations: [AppComponent, TeamStatsComponent, GameResultsComponent, GameStatsComponent],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule, ReactiveFormsModule],
+  imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule, ReactiveFormsModule, DialogComponent],
   providers: [],
   bootstrap: [AppComponent],
 })
