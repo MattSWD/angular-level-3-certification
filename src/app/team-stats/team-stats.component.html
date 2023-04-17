@@ -10,7 +10,7 @@
         <div class="day-range-container">
           <p>Results of past</p>
           <select [(ngModel)]="selectedRange" (ngModelChange)="getLastResults()">
-            <option *ngFor="let day of days" [ngValue]="day">{{ day }}</option>
+            <option *ngFor="let day of DAYS_INTERVAL" [ngValue]="day">{{ day }}</option>
           </select>
           <p>days:</p>
         </div>

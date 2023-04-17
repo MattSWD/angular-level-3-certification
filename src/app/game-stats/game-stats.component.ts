@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { Conference, Division, Team } from "../data.models";
+import { Conference, Division, Team } from "../shared/models/data.models";
 import { Observable, of, Subject, takeUntil, tap } from "rxjs";
 import { NbaService } from "../nba.service";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { DAYS_INTERVAL } from "../shared/constants/constants";
 
 @Component({
   selector: "app-game-stats",
@@ -20,7 +21,7 @@ export class GameStatsComponent implements OnInit, OnDestroy {
   teamsFilteringForm: FormGroup = new FormGroup<any>([]);
 
   constructor(protected nbaService: NbaService, private formBuilder: FormBuilder) {
-    this.teams$ = nbaService.getAllTeams().pipe(tap((data) => (this.allTeams = data)));
+    this.teams$ = nbaService.getAllTeams().pipe(tap((data: Team[]) => (this.allTeams = data)));
   }
 
   ngOnInit() {
@@ -37,6 +38,7 @@ export class GameStatsComponent implements OnInit, OnDestroy {
         disabled: true,
       }),
       team: new FormControl<Team>(null, { validators: Validators.required }),
+      days: new FormControl<number>(DAYS_INTERVAL[1]),
     });
   }
 
@@ -95,4 +97,6 @@ export class GameStatsComponent implements OnInit, OnDestroy {
     this._onDestroy.next();
     this._onDestroy.complete();
   }
+
+  protected readonly DAYS_INTERVAL = DAYS_INTERVAL;
 }

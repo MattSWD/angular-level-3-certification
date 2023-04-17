@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { NbaService } from "../nba.service";
-import { Game, Team } from "../data.models";
+import { Game, Team } from "../shared/models/data.models";
 import { Observable, Subject, takeUntil } from "rxjs";
 
 @Component({
