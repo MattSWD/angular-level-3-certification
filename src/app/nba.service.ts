@@ -46,7 +46,7 @@ export class NbaService {
       .pipe(map((res) => res.data));
   }
 
-  getLastResults(team: Team, numberOfDays = 12): Observable<Game[]> {
+  getLastResults(team: Team, numberOfDays: number = 12): Observable<Game[]> {
     return this.http
       .get<{
         meta: any;

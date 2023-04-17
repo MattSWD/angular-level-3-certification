@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { Observable, tap } from "rxjs";
+import { tap } from "rxjs";
 import { NbaService } from "../nba.service";
-import { Game, Stats, Team } from "../data.models";
+import { Stats, Team } from "../data.models";
 
 @Component({
   selector: "app-team-stats",
@@ -12,14 +12,26 @@ export class TeamStatsComponent implements OnInit {
   @Input()
   team!: Team;
 
-  games$!: Observable<Game[]>;
   stats!: Stats;
+
+  days: number[] = [6, 12, 20];
+  selectedRange: number = this.days[1];
+  loadingResult: boolean = false;
 
   constructor(protected nbaService: NbaService) {}
 
   ngOnInit(): void {
-    this.games$ = this.nbaService
-      .getLastResults(this.team, 12)
-      .pipe(tap((games) => (this.stats = this.nbaService.getStatsFromGames(games, this.team))));
+    this.getLastResults();
+  }
+
+  getLastResults() {
+    this.loadingResult = true;
+    this.nbaService
+      .getLastResults(this.team, this.selectedRange)
+      .pipe(tap((games) => (this.stats = this.nbaService.getStatsFromGames(games, this.team))))
+      .subscribe({
+        error: () => (this.loadingResult = false),
+        complete: () => (this.loadingResult = false),
+      });
   }
 }

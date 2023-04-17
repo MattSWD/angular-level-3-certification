@@ -1,4 +1,4 @@
-<div class="card" *ngIf="games$ | async as games">
+<div class="card">
   <div>
     <h3>{{ team.full_name }} [{{ team.abbreviation }}] <span (click)="dialog.showModal()">&times;</span></h3>
     <h6>{{ team.conference }}ern conference</h6>
@@ -6,31 +6,58 @@
   <hr />
   <div class="container">
     <div class="row">
-      <div class="col-sm-6">
-        <p>Results of past 12 days:</p>
-        <p>
-          <mark class="tag" *ngFor="let result of stats.lastGames" [class]="result">{{ result }}</mark>
-        </p>
-        <p>
-          Avg pts scored: <strong>{{ stats.averagePointsScored }}</strong>
-        </p>
-        <p>
-          Avg pts conceded: <strong>{{ stats.averagePointsConceded }}</strong>
-        </p>
+      <div class="col-sm-7">
+        <div class="day-range-container">
+          <p>Results of past</p>
+          <select [(ngModel)]="selectedRange" (ngModelChange)="getLastResults()">
+            <option *ngFor="let day of days" [ngValue]="day">{{ day }}</option>
+          </select>
+          <p>days:</p>
+        </div>
+
+        <ng-container *ngIf="!loadingResult">
+          <ng-container *ngIf="stats?.lastGames?.length > 0; else noGamesFound">
+            <p class="marks">
+              <mark class="tag" *ngFor="let result of stats.lastGames" [class]="result">{{ result }}</mark>
+            </p>
+            <p>
+              Avg pts scored: <strong>{{ stats.averagePointsScored }}</strong>
+            </p>
+            <p>
+              Avg pts conceded: <strong>{{ stats.averagePointsConceded }}</strong>
+            </p>
+          </ng-container>
+          <ng-template #noGamesFound> No matches recorded in the last {{ selectedRange }} days.</ng-template>
+        </ng-container>
       </div>
-      <div class="col-sm-6">
+      <div class="col-sm-5">
         <img src="https://interstate21.com/nba-logos/{{ team.abbreviation }}.png" />
       </div>
     </div>
   </div>
   <div>
-    <button class="tertiary" [routerLink]="'results/' + team.abbreviation">See game results >></button>
+    <!-- Spinner -->
+    <div class="lds-ring" *ngIf="loadingResult; else searchCompleted">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <ng-template #searchCompleted>
+      <button
+        class="tertiary"
+        [routerLink]="'results/' + team.abbreviation"
+        [queryParams]="{ selectedRange: selectedRange }"
+      >
+        See game results >>
+      </button>
+    </ng-template>
   </div>
 </div>
 
 <dialog app-dialog #dialog title="Removal Confirmation" class="dialog">
-  <p slot="content">Are you sure you want to remove this team?</p>
-  <div slot="footer">
+  <p content>Are you sure you want to remove this team?</p>
+  <div footer>
     <button class="button" (click)="dialog.close()">No</button>
     <button class="button" (click)="nbaService.removeTrackedTeam(team)">Yes</button>
   </div>
