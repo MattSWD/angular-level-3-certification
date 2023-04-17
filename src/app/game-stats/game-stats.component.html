@@ -22,6 +22,11 @@
         </option>
       </select>
 
+      <select formControlName="days">
+        <option *ngFor="let day of DAYS_INTERVAL" [ngValue]="day">{{ day }}</option>
+      </select>
+      <p class="paragraph">days</p>
+
       <button class="primary" type="submit" [disabled]="teamsFilteringForm?.invalid" (click)="trackTeam()">
         Track team
       </button>
@@ -29,5 +34,10 @@
   </div>
 </div>
 <div class="row">
-  <app-team-stats class="col-sm-4" *ngFor="let team of nbaService.getTrackedTeams()" [team]="team"> </app-team-stats>
+  <app-team-stats
+    class="col-sm-4"
+    *ngFor="let team of nbaService.getTrackedTeams()"
+    [team]="team"
+    [selectedRange]="teamsFilteringForm?.get('days')?.value"
+  ></app-team-stats>
 </div>

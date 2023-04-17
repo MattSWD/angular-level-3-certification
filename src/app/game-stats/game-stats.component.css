@@ -5,3 +5,7 @@ select:disabled {
 button:disabled {
   background: lightgray;
 }
+
+.paragraph {
+  display: inline;
+}

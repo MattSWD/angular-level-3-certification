@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { map, Observable } from "rxjs";
 import { format, subDays } from "date-fns";
-import { Conference, Division, Game, League, Stats, Team } from "./data.models";
+import { Conference, Division, Game, League, Stats, Team } from "./shared/models/data.models";
 
 @Injectable({
   providedIn: "root",
@@ -46,7 +46,7 @@ export class NbaService {
       .pipe(map((res) => res.data));
   }
 
-  getLastResults(team: Team, numberOfDays = 12): Observable<Game[]> {
+  getLastResults(team: Team, numberOfDays: number = 12): Observable<Game[]> {
     return this.http
       .get<{
         meta: any;
