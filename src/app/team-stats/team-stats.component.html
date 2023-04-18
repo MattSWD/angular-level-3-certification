@@ -47,6 +47,7 @@
         class="tertiary"
         [routerLink]="'results/' + team.abbreviation"
         [queryParams]="{ selectedRange: selectedRange }"
+        [disabled]="stats?.lastGames?.length == 0"
       >
         See game results >>
       </button>
