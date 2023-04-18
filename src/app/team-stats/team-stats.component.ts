@@ -28,6 +28,7 @@ export class TeamStatsComponent implements OnInit, OnChanges {
     this.getLastResults();
   }
 
+  /* Retrieval of the last matches in the selected range of Days */
   getLastResults() {
     this.loadingResult = true;
     this.nbaService

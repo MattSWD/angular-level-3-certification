@@ -50,6 +50,7 @@ export class GameStatsComponent implements OnInit, OnDestroy {
     });
   }
 
+  /* Conference Dropdown Change: Event triggered at change of Dropdown */
   onConferenceChange(): void {
     this.teamsFilteringForm
       .get("conference")
@@ -67,6 +68,7 @@ export class GameStatsComponent implements OnInit, OnDestroy {
       });
   }
 
+  /* Division Dropdown Change: Event triggered at change of Dropdown */
   onDivisionChange(): void {
     this.teamsFilteringForm
       .get("division")
@@ -81,6 +83,7 @@ export class GameStatsComponent implements OnInit, OnDestroy {
       });
   }
 
+  /* Method for retrieving filtered Teams from the Form */
   getFilteredTeam(): void {
     const selectedConference: Conference = this.teamsFilteringForm.get("conference").value;
     const selectedDivision: Division = this.teamsFilteringForm.get("division").value;
@@ -95,6 +98,7 @@ export class GameStatsComponent implements OnInit, OnDestroy {
     this.teams$ = of(filteredTeams.filter((x) => this.nbaService.getTrackedTeams().indexOf(x) === -1));
   }
 
+  /* Adding individual team to the Tracked List */
   trackTeam(): void {
     this.nbaService.addTrackedTeam(this.teamsFilteringForm.get("team").value as Team);
     (this.teamsFilteringForm.get("division") as FormControl<Division>).disable();

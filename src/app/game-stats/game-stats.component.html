@@ -1,5 +1,6 @@
 <div class="row">
   <div class="col-sm-12">
+    <!-- Form containing all Team Filters -->
     <form class="form" [formGroup]="teamsFilteringForm">
       <div class="flex-row">
         <select formControlName="conference">
@@ -36,6 +37,7 @@
 
 <ng-container *ngIf="nbaService.getTrackedTeams()?.length > 0">
   <div class="row">
+    <!-- Form containing selection of Days -->
     <form class="form days-form" [formGroup]="daysRange">
       <p class="paragraph">Results of past</p>
       <select formControlName="days">
