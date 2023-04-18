@@ -1,16 +1,59 @@
 <div class="row">
-  <div class="col-sm-11">
-    <select #teamSelect>
-      <option [value]="team.id" *ngFor="let team of teams$ | async">
-        {{team.full_name}}
-      </option>
-    </select>
-    <button class="primary" (click)="trackTeam(teamSelect.value)">Track team</button>
+  <div class="col-sm-12">
+    <!-- Form containing all Team Filters -->
+    <form class="form" [formGroup]="teamsFilteringForm">
+      <div class="flex-row">
+        <select formControlName="conference">
+          <option [value]="null" disabled selected>Select a Conference</option>
+          <option [value]="singleConference" *ngFor="let singleConference of CONFERENCES">
+            {{ singleConference }}ern
+          </option>
+        </select>
+
+        <select formControlName="division">
+          <option [value]="null" disabled selected>Select a Division</option>
+          <option [value]="singleDivision" *ngFor="let singleDivision of division$ | async">
+            {{ singleDivision }}
+          </option>
+        </select>
+
+        <select formControlName="team">
+          <option [value]="null" disabled selected>Select a Team</option>
+          <option [ngValue]="team" *ngFor="let team of teams$ | async">
+            {{ team.full_name }}
+          </option>
+        </select>
+
+        <button class="primary" type="submit" [disabled]="teamsFilteringForm?.invalid" (click)="trackTeam()">
+          Track team
+        </button>
+        <button class="primary" type="button" [disabled]="!teamsFilteringForm?.dirty" (click)="resetForm()">
+          Reset Filters
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<ng-container *ngIf="nbaService.getTrackedTeams()?.length > 0">
+  <div class="row">
+    <!-- Form containing selection of Days -->
+    <form class="form days-form" [formGroup]="daysRange">
+      <p class="paragraph">Results of past</p>
+      <select formControlName="days">
+        <option *ngFor="let day of DAYS_INTERVAL" [ngValue]="day">{{ day }}</option>
+      </select>
+      <p class="paragraph">days for all teams</p>
+    </form>
   </div>
 
-</div>
-<div class="row">
-  <app-team-stats class="col-sm-4" *ngFor="let team of nbaService.getTrackedTeams()" [team]="team">
-
-  </app-team-stats>
-</div>
+  <div class="row">
+    <app-team-stats
+      class="col-sm-4"
+      *ngFor="let team of nbaService.getTrackedTeams()"
+      [team]="team"
+      [selectedRange]="daysRange.get('days')?.value"
+      (calculateTeamsList)="getFilteredTeam()"
+    ></app-team-stats>
+  </div>
+</ng-container>

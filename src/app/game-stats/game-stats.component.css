@@ -1,0 +1,34 @@
+select:disabled {
+  border-color: var(--input-border-color);
+}
+
+button:disabled {
+  background: lightgray;
+}
+
+.paragraph {
+  display: inline;
+}
+
+.form {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.days-form {
+  justify-content: flex-start;
+  background: inherit;
+  border: none;
+}
+
+.flex-row {
+  display: flex;
+  flex: 0.8;
+  flex-wrap: wrap;
+}
+
+.flex-row > select {
+  flex: 1;
+}
