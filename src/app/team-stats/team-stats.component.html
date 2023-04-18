@@ -59,6 +59,6 @@
   <p content>Are you sure you want to remove this team?</p>
   <div footer>
     <button class="button" (click)="dialog.close()">No</button>
-    <button class="button" (click)="nbaService.removeTrackedTeam(team)">Yes</button>
+    <button class="button" (click)="removeTeamAndCalculate(team)">Yes</button>
   </div>
 </dialog>

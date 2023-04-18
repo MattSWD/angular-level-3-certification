@@ -3,7 +3,7 @@ import { Conference, Division, Team } from "../shared/models/data.models";
 import { Observable, of, Subject, takeUntil, tap } from "rxjs";
 import { NbaService } from "../nba.service";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { DAYS_INTERVAL } from "../shared/constants/constants";
+import { CONFERENCES, DAYS_INTERVAL } from "../shared/constants/constants";
 
 @Component({
   selector: "app-game-stats",
@@ -11,14 +11,16 @@ import { DAYS_INTERVAL } from "../shared/constants/constants";
   styleUrls: ["./game-stats.component.css"],
 })
 export class GameStatsComponent implements OnInit, OnDestroy {
-  protected _onDestroy: Subject<void> = new Subject<void>();
-
   teams$: Observable<Team[]>;
   division$: Observable<Division[]>;
 
   allTeams: Team[] = [];
-  allConference: Conference[] = ["West", "East"];
+  daysRange: FormGroup = new FormGroup<any>([]);
   teamsFilteringForm: FormGroup = new FormGroup<any>([]);
+
+  protected _onDestroy: Subject<void> = new Subject<void>();
+  protected readonly DAYS_INTERVAL: number[] = DAYS_INTERVAL;
+  protected readonly CONFERENCES: Conference[] = CONFERENCES;
 
   constructor(protected nbaService: NbaService, private formBuilder: FormBuilder) {
     this.teams$ = nbaService.getAllTeams().pipe(tap((data: Team[]) => (this.allTeams = data)));
@@ -26,8 +28,15 @@ export class GameStatsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.creatingTeamsFilteringForm();
+    this.creatingDaysRangeForm();
     this.onConferenceChange();
     this.onDivisionChange();
+  }
+
+  creatingDaysRangeForm(): void {
+    this.daysRange = this.formBuilder.group({
+      days: new FormControl<number>(DAYS_INTERVAL[1]),
+    });
   }
 
   creatingTeamsFilteringForm(): void {
@@ -38,7 +47,6 @@ export class GameStatsComponent implements OnInit, OnDestroy {
         disabled: true,
       }),
       team: new FormControl<Team>(null, { validators: Validators.required }),
-      days: new FormControl<number>(DAYS_INTERVAL[1]),
     });
   }
 
@@ -84,7 +92,7 @@ export class GameStatsComponent implements OnInit, OnDestroy {
     if (selectedDivision) {
       filteredTeams = filteredTeams.filter((team: Team) => team.division == selectedDivision);
     }
-    this.teams$ = of(filteredTeams);
+    this.teams$ = of(filteredTeams.filter((x) => this.nbaService.getTrackedTeams().indexOf(x) === -1));
   }
 
   trackTeam(): void {
@@ -93,10 +101,12 @@ export class GameStatsComponent implements OnInit, OnDestroy {
     (this.teamsFilteringForm.get("conference") as FormControl<Conference>).reset();
   }
 
+  resetForm(): void {
+    this.teamsFilteringForm?.reset();
+  }
+
   ngOnDestroy(): void {
     this._onDestroy.next();
     this._onDestroy.complete();
   }
-
-  protected readonly DAYS_INTERVAL = DAYS_INTERVAL;
 }
