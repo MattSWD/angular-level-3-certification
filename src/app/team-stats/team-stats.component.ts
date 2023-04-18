@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { tap } from "rxjs";
 import { NbaService } from "../nba.service";
 import { Stats, Team } from "../shared/models/data.models";
@@ -16,16 +8,17 @@ import { DAYS_INTERVAL } from "../shared/constants/constants";
   selector: "app-team-stats",
   templateUrl: "./team-stats.component.html",
   styleUrls: ["./team-stats.component.css"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TeamStatsComponent implements OnInit, OnChanges {
   @Input() team!: Team;
-  stats!: Stats;
-
   @Input("selectedRange") selectedRange: number = DAYS_INTERVAL[1];
-  loadingResult: boolean = false;
+  @Output() calculateTeamsList: EventEmitter<void> = new EventEmitter<void>();
 
-  constructor(private changeDetectorRef: ChangeDetectorRef, protected nbaService: NbaService) {}
+  stats!: Stats;
+  loadingResult: boolean = false;
+  protected readonly DAYS_INTERVAL: number[] = DAYS_INTERVAL;
+
+  constructor(protected nbaService: NbaService) {}
 
   ngOnInit(): void {
     this.getLastResults();
@@ -35,6 +28,7 @@ export class TeamStatsComponent implements OnInit, OnChanges {
     this.getLastResults();
   }
 
+  /* Retrieval of the last matches in the selected range of Days */
   getLastResults() {
     this.loadingResult = true;
     this.nbaService
@@ -43,14 +37,15 @@ export class TeamStatsComponent implements OnInit, OnChanges {
       .subscribe({
         error: () => {
           this.loadingResult = false;
-          this.changeDetectorRef.markForCheck();
         },
         complete: () => {
           this.loadingResult = false;
-          this.changeDetectorRef.markForCheck();
         },
       });
   }
 
-  protected readonly DAYS_INTERVAL = DAYS_INTERVAL;
+  removeTeamAndCalculate(team: Team) {
+    this.nbaService.removeTrackedTeam(team);
+    this.calculateTeamsList.emit();
+  }
 }

@@ -4,7 +4,7 @@
     <h6>{{ team.conference }}ern conference</h6>
   </div>
   <hr />
-  <div class="container">
+  <div class="container" *ngIf="!loadingResult">
     <div class="row">
       <div class="col-sm-7">
         <div class="day-range-container">
@@ -15,27 +15,26 @@
           <p>days:</p>
         </div>
 
-        <ng-container *ngIf="!loadingResult">
-          <ng-container *ngIf="stats?.lastGames?.length > 0; else noGamesFound">
-            <p class="marks">
-              <mark class="tag" *ngFor="let result of stats.lastGames" [class]="result">{{ result }}</mark>
-            </p>
-            <p>
-              Avg pts scored: <strong>{{ stats.averagePointsScored }}</strong>
-            </p>
-            <p>
-              Avg pts conceded: <strong>{{ stats.averagePointsConceded }}</strong>
-            </p>
-          </ng-container>
-          <ng-template #noGamesFound> No matches recorded in the last {{ selectedRange }} days.</ng-template>
+        <ng-container *ngIf="stats?.lastGames?.length > 0; else noGamesFound">
+          <p class="marks">
+            <mark class="tag" *ngFor="let result of stats.lastGames" [class]="result">{{ result }}</mark>
+          </p>
+          <p>
+            Avg pts scored: <strong>{{ stats.averagePointsScored }}</strong>
+          </p>
+          <p>
+            Avg pts conceded: <strong>{{ stats.averagePointsConceded }}</strong>
+          </p>
         </ng-container>
+        <ng-template #noGamesFound> No matches recorded in the last {{ selectedRange }} days.</ng-template>
       </div>
       <div class="col-sm-5">
         <img src="https://interstate21.com/nba-logos/{{ team.abbreviation }}.png" />
       </div>
     </div>
   </div>
-  <div>
+
+  <div class="navigation-row">
     <!-- Spinner -->
     <div class="lds-ring" *ngIf="loadingResult; else searchCompleted">
       <div></div>
@@ -59,6 +58,6 @@
   <p content>Are you sure you want to remove this team?</p>
   <div footer>
     <button class="button" (click)="dialog.close()">No</button>
-    <button class="button" (click)="nbaService.removeTrackedTeam(team)">Yes</button>
+    <button class="button" (click)="removeTeamAndCalculate(team)">Yes</button>
   </div>
 </dialog>
