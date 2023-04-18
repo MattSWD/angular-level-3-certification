@@ -101,12 +101,12 @@ export class GameStatsComponent implements OnInit, OnDestroy {
   /* Adding individual team to the Tracked List */
   trackTeam(): void {
     this.nbaService.addTrackedTeam(this.teamsFilteringForm.get("team").value as Team);
-    (this.teamsFilteringForm.get("division") as FormControl<Division>).disable();
-    (this.teamsFilteringForm.get("conference") as FormControl<Conference>).reset();
+    this.resetForm();
   }
 
   resetForm(): void {
     this.teamsFilteringForm?.reset();
+    (this.teamsFilteringForm.get("division") as FormControl<Division>).disable();
   }
 
   ngOnDestroy(): void {
